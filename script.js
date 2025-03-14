@@ -10,18 +10,6 @@ function Gameboard() {
 		}
 	}
 
-	const cell = () => {
-		let value = "empty";
-		const addMarker = (player) => {
-			value = player;
-		};
-		const getValue = () => value;
-		return {
-			addMarker,
-			getValue,
-		};
-	};
-
 	const getBoard = () => board;
 
 	const placeMarker = (row, column, player) => {
@@ -41,4 +29,16 @@ function Gameboard() {
 	};
 
 	return { getBoard, placeMarker, printBoard };
+}
+
+function Cell() {
+	let value = "empty";
+	const addMarker = (player) => {
+		value = player;
+	};
+	const getValue = () => value;
+	return {
+		addMarker,
+		getValue,
+	};
 }
