@@ -65,9 +65,9 @@ function GameController(
 	// following if statement could be refactored to:
 	// activePlayer = activePlayer === players[0] ? players[1] : players[0];
 	const switchPlayerTurn = () => {
-		if ((activePlayer = players[0])) {
+		if (activePlayer === players[0]) {
 			activePlayer = players[1];
-		} else if ((activePlayer = players[1])) {
+		} else {
 			activePlayer = players[0];
 		}
 	};
