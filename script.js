@@ -3,6 +3,7 @@ function Gameboard() {
 	const columns = 3;
 	const board = [];
 
+	// nested-loop to create 2D array
 	for (let i = 0; i < rows; i++) {
 		board[i] = [];
 		for (let j = 0; j < columns; j++) {
@@ -10,13 +11,16 @@ function Gameboard() {
 		}
 	}
 
+	// retrieves current state of board
 	const getBoard = () => board;
 
 	//TODO: Make sure space is empty before placing marker
+	// In UI version this can be done by allowing the click event to only fire once
 	const placeMarker = (row, column, player) => {
 		board[row][column].addMarker(player);
 	};
 
+	// print board to console
 	// DELETE after building UI
 	const printBoard = () => {
 		const boardWithCellValues = board.map((row) =>
@@ -43,12 +47,7 @@ function Cell() {
 	};
 }
 
-function GameController(
-	playerOneName = "Player One",
-	playerTwoName = "Player Two"
-) {
-	const board = Gameboard();
-
+function Player(playerOneName = "Player One", playerTwoName = "Player Two") {
 	const players = [
 		{
 			name: playerOneName,
@@ -73,31 +72,86 @@ function GameController(
 	};
 	const getActivePlayer = () => activePlayer;
 
+	return {
+		switchPlayerTurn,
+		getActivePlayer,
+	};
+}
+
+function GameController() {
+	const board = Gameboard();
+	const players = Player();
+
 	// DELETE after building UI?
 	const printNewRound = () => {
 		board.printBoard();
-		console.log(`${getActivePlayer().name}'s turn...`);
+		console.log(`${players.getActivePlayer().name}'s turn...`);
 	};
+
+	// const checkWinner = () => {
+	// 	let arr = board.getBoard;
+	// 	// row check
+	// 	for (let i = 0; i < board.rows; i++) {
+	// 		if (
+	// 			arr[i][0] === arr[i][1] &&
+	// 			arr[i][1] === arr[i][2] &&
+	// 			arr[i][0] !== ""
+	// 		) {
+	// 			return true;
+	// 		}
+	// 	}
+	// 	// column check
+	// 	for (let j = 0; j < board.columns; j++) {
+	// 		if (
+	// 			arr[0][j] === arr[1][j] &&
+	// 			arr[1][j] === arr[2][j] &&
+	// 			arr[0][j] !== ""
+	// 		) {
+	// 			return true;
+	// 		}
+	// 	}
+	// 	// diagonal checks
+	// 	if (
+	// 		arr[0][0].getValue() === arr[1][1].getValue() &&
+	// 		arr[1][1].getValue() === arr[2][2].getValue() &&
+	// 		arr[0][0].getValue() !== ""
+	// 	) {
+	// 		return true;
+	// 	}
+
+	// 	if (
+	// 		arr[0][2].getValue() === arr[1][1].getValue() &&
+	// 		arr[1][1].getValue() === arr[2][0].getValue() &&
+	// 		arr[0][2].getValue() !== ""
+	// 	) {
+	// 		return true;
+	// 	}
+	// 	return false;
+	// };
 
 	const playRound = (row, column) => {
 		console.log(
-			`${getActivePlayer().name} places an ${
-				getActivePlayer().marker
+			`${players.getActivePlayer().name} places an ${
+				players.getActivePlayer().marker
 			} in cell board[${row}][${column}]`
 		);
-		board.placeMarker(row, column, getActivePlayer().marker);
-
-		//TODO: Check for win conditions
-
-		switchPlayerTurn();
+		board.placeMarker(row, column, players.getActivePlayer().marker);
+		// checkWinner();
+		// if (checkWinner()) {
+		// 	console.log(
+		// 		`Congratulations ${players.getActivePlayer().name}! You won this round!`
+		// 	);
+		// 	board.printBoard;
+		// } else {
+		players.switchPlayerTurn();
 		printNewRound();
+		// }
 	};
 
 	printNewRound();
 
 	return {
 		playRound,
-		getActivePlayer,
 	};
 }
 
