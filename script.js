@@ -7,44 +7,20 @@ function Gameboard() {
 	for (let i = 0; i < rows; i++) {
 		board[i] = [];
 		for (let j = 0; j < columns; j++) {
-			board[i].push(Cell());
+			board[i].push("");
 		}
 	}
 
 	// retrieves current state of board
 	const getBoard = () => board;
 
-	//TODO: Make sure space is empty before placing marker
-	// In UI version this can be done by allowing the click event to only fire once
-	const placeMarker = (row, column, player) => {
-		board[row][column].addMarker(player);
-	};
-
 	// print board to console
 	// DELETE after building UI
 	const printBoard = () => {
-		const boardWithCellValues = board.map((row) =>
-			row.map((cell) => cell.getValue())
-		);
-		console.log(boardWithCellValues);
+		console.table(board);
 	};
 
-	return { getBoard, placeMarker, printBoard };
-}
-
-function Cell() {
-	let value = "";
-
-	const addMarker = (player) => {
-		value = player;
-	};
-
-	const getValue = () => value;
-
-	return {
-		addMarker,
-		getValue,
-	};
+	return { getBoard, printBoard };
 }
 
 function Player(playerOneName = "Player One", playerTwoName = "Player Two") {
@@ -86,6 +62,14 @@ function GameController() {
 	const printNewRound = () => {
 		board.printBoard();
 		console.log(`${players.getActivePlayer().name}'s turn...`);
+	};
+
+	printNewRound();
+
+	//TODO: Make sure space is empty before placing marker
+	// In UI version this can be done by allowing the click event to only fire once
+	const placeMarker = (row, column, marker) => {
+		board.getBoard()[row][column] = marker;
 	};
 
 	// const checkWinner = () => {
@@ -135,7 +119,7 @@ function GameController() {
 				players.getActivePlayer().marker
 			} in cell board[${row}][${column}]`
 		);
-		board.placeMarker(row, column, players.getActivePlayer().marker);
+		placeMarker(row, column, players.getActivePlayer().marker);
 		// checkWinner();
 		// if (checkWinner()) {
 		// 	console.log(
@@ -147,8 +131,6 @@ function GameController() {
 		printNewRound();
 		// }
 	};
-
-	printNewRound();
 
 	return {
 		playRound,
