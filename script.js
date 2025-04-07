@@ -69,7 +69,12 @@ function GameController() {
 	//TODO: Make sure space is empty before placing marker
 	// In UI version this can be done by allowing the click event to only fire once
 	const placeMarker = (row, column, marker) => {
-		board.getBoard()[row][column] = marker;
+		if (board.getBoard()[row][column] === "") {
+			board.getBoard()[row][column] = marker;
+			players.switchPlayerTurn();
+		} else {
+			console.log("That space is already taken. Please choose another.");
+		}
 	};
 
 	// const checkWinner = () => {
@@ -127,7 +132,6 @@ function GameController() {
 		// 	);
 		// 	board.printBoard;
 		// } else {
-		players.switchPlayerTurn();
 		printNewRound();
 		// }
 	};
