@@ -66,74 +66,73 @@ function GameController() {
 
 	printNewRound();
 
-	//TODO: Make sure space is empty before placing marker
-	// In UI version this can be done by allowing the click event to only fire once
 	const placeMarker = (row, column, marker) => {
-		if (board.getBoard()[row][column] === "") {
-			board.getBoard()[row][column] = marker;
-			players.switchPlayerTurn();
-		} else {
-			console.log("That space is already taken. Please choose another.");
+		board.getBoard()[row][column] = marker;
+	};
+
+	const checkWinner = () => {
+		// row check
+		for (let i = 0; i < board.rows; i++) {
+			if (
+				board.getBoard()[i][0] === board.getBoard()[i][1] &&
+				board.getBoard()[i][1] === board.getBoard()[i][2] &&
+				board.getBoard()[i][0] !== ""
+			) {
+				return true;
+			}
+		}
+		// column check
+		for (let j = 0; j < board.columns; j++) {
+			if (
+				board.getBoard()[0][j] === board.getBoard()[1][j] &&
+				board.getBoard()[1][j] === board.getBoard()[2][j] &&
+				board.getBoard()[0][j] !== ""
+			) {
+				return true;
+			}
+		}
+		// diagonal checks
+		if (
+			board.getBoard()[0][0] === board.getBoard()[1][1] &&
+			board.getBoard()[1][1] === board.getBoard()[2][2] &&
+			board.getBoard()[0][0] !== ""
+		) {
+			return true;
+		}
+
+		if (
+			board.getBoard()[0][2] === board.getBoard()[1][1] &&
+			board.getBoard()[1][1] === board.getBoard()[2][0] &&
+			board.getBoard()[0][2] !== ""
+		) {
+			return true;
 		}
 	};
 
-	// const checkWinner = () => {
-	// 	let arr = board.getBoard;
-	// 	// row check
-	// 	for (let i = 0; i < board.rows; i++) {
-	// 		if (
-	// 			arr[i][0] === arr[i][1] &&
-	// 			arr[i][1] === arr[i][2] &&
-	// 			arr[i][0] !== ""
-	// 		) {
-	// 			return true;
-	// 		}
-	// 	}
-	// 	// column check
-	// 	for (let j = 0; j < board.columns; j++) {
-	// 		if (
-	// 			arr[0][j] === arr[1][j] &&
-	// 			arr[1][j] === arr[2][j] &&
-	// 			arr[0][j] !== ""
-	// 		) {
-	// 			return true;
-	// 		}
-	// 	}
-	// 	// diagonal checks
-	// 	if (
-	// 		arr[0][0].getValue() === arr[1][1].getValue() &&
-	// 		arr[1][1].getValue() === arr[2][2].getValue() &&
-	// 		arr[0][0].getValue() !== ""
-	// 	) {
-	// 		return true;
-	// 	}
-
-	// 	if (
-	// 		arr[0][2].getValue() === arr[1][1].getValue() &&
-	// 		arr[1][1].getValue() === arr[2][0].getValue() &&
-	// 		arr[0][2].getValue() !== ""
-	// 	) {
-	// 		return true;
-	// 	}
-	// 	return false;
-	// };
-
 	const playRound = (row, column) => {
-		console.log(
-			`${players.getActivePlayer().name} places an ${
-				players.getActivePlayer().marker
-			} in cell board[${row}][${column}]`
-		);
-		placeMarker(row, column, players.getActivePlayer().marker);
-		// checkWinner();
-		// if (checkWinner()) {
-		// 	console.log(
-		// 		`Congratulations ${players.getActivePlayer().name}! You won this round!`
-		// 	);
-		// 	board.printBoard;
-		// } else {
-		printNewRound();
-		// }
+		if (board.getBoard()[row][column] !== "") {
+			console.log("That space is already taken. Please choose another.");
+			printNewRound();
+		} else {
+			console.log(
+				`${players.getActivePlayer().name} places an ${
+					players.getActivePlayer().marker
+				} in cell board[${row}][${column}]`
+			);
+			placeMarker(row, column, players.getActivePlayer().marker);
+			checkWinner();
+			if (checkWinner()) {
+				console.log(
+					`Congratulations ${
+						players.getActivePlayer().name
+					}! You won this round!`
+				);
+				board.printBoard();
+			} else {
+				players.switchPlayerTurn();
+				printNewRound();
+			}
+		}
 	};
 
 	return {
