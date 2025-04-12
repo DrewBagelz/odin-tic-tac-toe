@@ -109,6 +109,14 @@ function GameController() {
 		}
 	};
 
+	// Couldn't figure out how to correctly use the includes method with the 2D array so I had to flatten it for now
+	const checkTie = () => {
+		const flatBoard = board.getBoard().flat();
+		if (!flatBoard.includes("")) {
+			return true;
+		}
+	};
+
 	const playRound = (row, column) => {
 		if (board.getBoard()[row][column] !== "") {
 			console.log("That space is already taken. Please choose another.");
@@ -121,12 +129,16 @@ function GameController() {
 			);
 			placeMarker(row, column, players.getActivePlayer().marker);
 			checkWinner();
+			checkTie();
 			if (checkWinner()) {
 				console.log(
 					`Congratulations ${
 						players.getActivePlayer().name
 					}! You won this round!`
 				);
+				board.printBoard();
+			} else if (checkTie() && !checkWinner()) {
+				console.log("Board is full. This game ends in a draw.");
 				board.printBoard();
 			} else {
 				players.switchPlayerTurn();
