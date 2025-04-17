@@ -20,7 +20,16 @@ function Gameboard() {
 		console.table(board);
 	};
 
-	return { getBoard, printBoard };
+	const resetBoard = () => {
+		for (let i = 0; i < rows; i++) {
+			board[i] = [];
+			for (let j = 0; j < columns; j++) {
+				board[i].push("");
+			}
+		}
+	};
+
+	return { getBoard, printBoard, resetBoard };
 }
 
 function Player(playerOneName = "Player One", playerTwoName = "Player Two") {
@@ -48,9 +57,12 @@ function Player(playerOneName = "Player One", playerTwoName = "Player Two") {
 	};
 	const getActivePlayer = () => activePlayer;
 
+	const setActivePlayer = (i) => (activePlayer = players[i]);
+
 	return {
 		switchPlayerTurn,
 		getActivePlayer,
+		setActivePlayer,
 	};
 }
 
@@ -147,8 +159,15 @@ function GameController() {
 		}
 	};
 
+	const resetRound = () => {
+		board.resetBoard();
+		players.setActivePlayer(0);
+		printNewRound();
+	};
+
 	return {
 		playRound,
+		resetRound,
 	};
 }
 
